@@ -1,116 +1,83 @@
-## Hi there 👋
+# Explainable AI Financial Risk Platform
 
--->
+An end-to-end prototype for reviewing financial transactions with a transparent risk assessment. The platform combines a FastAPI backend with a React/Vite frontend so risk teams can submit transaction details, inspect a risk score, and see which transaction signals contributed most to the result.
 
+## What It Does
 
+- Accepts transaction amount, hour of day, distance from home, and recent transaction count.
+- Validates inputs through a typed FastAPI request model.
+- Returns a normalized risk score and `low` or `high` risk label.
+- Provides ranked feature contributions so each assessment is interpretable.
+- Includes notebooks and model utilities for exploratory analysis, feature engineering, training, and SHAP analysis.
+- Provides Docker Compose, Render, Vercel, and Nginx deployment configuration.
 
-explainable-ai-financial-risk-platform/
-│
-├── README.md
-├── requirements.txt
-├── docker-compose.yml
-├── .gitignore
-│
-├── data/
-│   ├── raw/
-│   │   └── creditcard.csv
-│   │
-│   ├── processed/
-│   │   └── cleaned_data.csv
-│   │
-│   └── sample_inputs/
-│       └── transactions.json
-│
-├── notebooks/
-│   ├── 01_EDA.ipynb
-│   ├── 02_Feature_Engineering.ipynb
-│   ├── 03_Model_Training.ipynb
-│   └── 04_SHAP_Analysis.ipynb
-│
-├── backend/
-│   │
-│   ├── app/
-│   │   │
-│   │   ├── main.py
-│   │   │
-│   │   ├── api/
-│   │   │   └── routes.py
-│   │   │
-│   │   ├── models/
-│   │   │   ├── predictor.py
-│   │   │   ├── train.py
-│   │   │   └── shap_engine.py
-│   │   │
-│   │   ├── database/
-│   │   │   ├── db.py
-│   │   │   └── schemas.py
-│   │   │
-│   │   ├── utils/
-│   │   │   ├── preprocess.py
-│   │   │   ├── metrics.py
-│   │   │   └── logger.py
-│   │   │
-│   │   └── config.py
-│   │
-│   ├── trained_models/
-│   │   ├── xgboost_model.pkl
-│   │   ├── random_forest_model.pkl
-│   │   └── shap_explainer.pkl
-│   │
-│   ├── tests/
-│   │   └── test_prediction.py
-│   │
-│   ├── Dockerfile
-│   └── requirements.txt
-│
-├── frontend/
-│   │
-│   ├── public/
-│   │
-│   ├── src/
-│   │   │
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── RiskCard.jsx
-│   │   │   ├── SHAPChart.jsx
-│   │   │   ├── PredictionForm.jsx
-│   │   │   ├── MetricsPanel.jsx
-│   │   │   └── AuditTable.jsx
-│   │   │
-│   │   ├── pages/
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── PredictionPage.jsx
-│   │   │   ├── AuditLogs.jsx
-│   │   │   └── ModelMonitoring.jsx
-│   │   │
-│   │   ├── services/
-│   │   │   └── api.js
-│   │   │
-│   │   ├── hooks/
-│   │   │   └── usePrediction.js
-│   │   │
-│   │   ├── assets/
-│   │   │
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   │
-│   ├── package.json
-│   └── Dockerfile
-│
-├── visualizations/
-│   ├── shap_summary.png
-│   ├── shap_force_plot.png
-│   ├── feature_importance.png
-│   └── confusion_matrix.png
-│
-├── docs/
-│   ├── architecture.png
-│   ├── system_design.md
-│   ├── api_documentation.md
-│   └── deployment_guide.md
-│
-└── deployment/
-    ├── vercel.json
-    ├── render.yaml
-    └── nginx.conf
+The current API uses a deterministic demo scorer in `backend/app/models/predictor.py`. The model-training and SHAP modules provide the foundation for replacing it with trained artifacts.
+
+## Architecture
+
+The system is split into two services:
+
+- **Backend:** FastAPI service on port `8000`, exposing `/health` and `POST /api/predict`.
+- **Frontend:** React/Vite application on port `5173`, providing the transaction review interface.
+
+The repository also contains data placeholders, sample transaction input, analysis notebooks, tests, documentation, and deployment manifests.
+
+## Quick Start
+
+### Run with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Then open:
+
+- Frontend: http://localhost:5173
+- Backend health check: http://localhost:8000/health
+
+### Run the services locally
+
+Backend:
+
+```bash
+pip install -r backend/requirements.txt
+uvicorn app.main:app --app-dir backend --reload --port 8000
+```
+
+Frontend, in a separate terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## API Example
+
+```bash
+curl -X POST http://localhost:8000/api/predict \
+    -H "Content-Type: application/json" \
+    -d '{
+        "amount": 850,
+        "hour": 2,
+        "distance_from_home_km": 300,
+        "recent_transaction_count": 8
+    }'
+```
+
+The response includes `risk_score`, `risk_label`, and an `explanations` array sorted by feature impact. Full endpoint details are available in [API documentation](docs/api_documentation.md).
+
+## Repository Layout
+
+```text
+backend/       FastAPI application, prediction logic, tests, and model artifacts
+frontend/      React/Vite transaction review interface
+data/          Raw, processed, and sample input data locations
+notebooks/     EDA, feature engineering, training, and SHAP analysis notebooks
+docs/          System design, API, and deployment documentation
+deployment/    Render, Vercel, and Nginx configuration
+```
+
+## Project Status
+
+This is an explainable-risk platform prototype. The scoring endpoint and review UI are available now; persistence, production model artifacts, and expanded monitoring workflows remain part of the platform's ongoing development.
