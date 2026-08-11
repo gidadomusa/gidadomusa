@@ -1,0 +1,2 @@
+# Shared project dependencies are documented in backend/requirements.txt.
+-r backend/requirements.txt

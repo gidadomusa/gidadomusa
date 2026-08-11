@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: financial-risk-api
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
