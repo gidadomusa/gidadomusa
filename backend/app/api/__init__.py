@@ -13,6 +13,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 from typing import List, Optional
 
+# Import DB init
+from backend.app.db import init_db
+
 # Configure module-level logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("backend.api")
@@ -53,9 +56,11 @@ def create_app(
     try:
         # Import here to avoid circular imports on package import
         # ImportError means the routers module/file doesn't exist yet — that's fine.
-        from .routers import health, users  # create these modules as needed
+        from .routers import health, users, auth, models  # create these modules as needed
         app.include_router(health.router, prefix="/api/health", tags=["health"])
+        app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
         app.include_router(users.router, prefix="/api/users", tags=["users"])
+        app.include_router(models.router, prefix="/api/models", tags=["models"])
     except ImportError:
         # Routers not present yet (development). Log at debug with stacktrace.
         logger.debug("Routers not yet configured", exc_info=True)
@@ -82,6 +87,11 @@ def create_app(
     async def _startup_event():
         logger.info("API startup: initializing resources (DB/clients/etc.)")
         # Initialize DB connections, caches, background tasks, etc. here.
+        # Create DB tables if they don't exist
+        try:
+            init_db()
+        except Exception:
+            logger.exception("Failed to initialize DB")
 
     @app.on_event("shutdown")
     async def _shutdown_event():
