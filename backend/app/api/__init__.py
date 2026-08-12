@@ -7,11 +7,11 @@ Expect to add router modules under backend/app/api/routers/, e.g.:
 - backend/app/api/routers/health.py
 - backend/app/api/routers/users.py
 """
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import logging
-from typing import List
+from typing import List, Optional
 
 # Configure module-level logger
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,7 @@ logger = logging.getLogger("backend.api")
 def create_app(
     title: str = "My API",
     version: str = "0.1.0",
-    allowed_origins: List[str] = None,
+    allowed_origins: Optional[List[str]] = None,
 ) -> FastAPI:
     """
     Create and configure the FastAPI application.
@@ -52,14 +52,23 @@ def create_app(
     # Example: include routers (create these modules under backend/app/api/routers/)
     try:
         # Import here to avoid circular imports on package import
+        # ImportError means the routers module/file doesn't exist yet — that's fine.
         from .routers import health, users  # create these modules as needed
         app.include_router(health.router, prefix="/api/health", tags=["health"])
         app.include_router(users.router, prefix="/api/users", tags=["users"])
+    except ImportError:
+        # Routers not present yet (development). Log at debug with stacktrace.
+        logger.debug("Routers not yet configured", exc_info=True)
     except Exception:
-        # If routers are not present yet, log and continue — makes gradual migration easier.
-        logger.debug("Routers not yet configured: %s", exc_info=True)
+        # Something unexpected happened while importing or including routers — log as error.
+        logger.exception("Failed to include routers")
 
-    # Generic exception handler (keep specific handlers for known exceptions)
+    # HTTPException handler (preserve status_code/detail)
+    @app.exception_handler(HTTPException)
+    async def _http_exception_handler(request: Request, exc: HTTPException):
+        return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+    # Generic exception handler (fallback)
     @app.exception_handler(Exception)
     async def _internal_exception_handler(request: Request, exc: Exception):
         logger.exception("Unhandled exception for request %s %s", request.method, request.url)
