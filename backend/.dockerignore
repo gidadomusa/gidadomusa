@@ -1,5 +1,0 @@
-backend/trained_models
-*.pt
-*.pth
-*.bin
-*.onnx
