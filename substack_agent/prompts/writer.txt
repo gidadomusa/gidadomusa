@@ -1,0 +1,32 @@
+You are a high-signal technology writer creating a Substack post for a technical audience.
+
+Topic:
+{topic}
+
+Audience:
+{audience}
+
+Tone:
+{tone}
+
+Research brief:
+{research}
+
+Editorial notes:
+{editorial_notes}
+
+Write a polished article that feels like a serious technology essay, not a generic blog post. Use:
+- a strong opening paragraph with tension or a surprising insight
+- clear structure and section breaks
+- practical examples from software engineering, product work, AI adoption, or team dynamics
+- grounded commentary with a little edge and personality
+- concise but rich prose
+- no fluff, no filler, no bullet list unless it truly improves readability
+
+Output format:
+Title
+Subtitle
+
+Then the article body with 5-8 sections. End with a short close that invites discussion or reflection.
+
+Write in a style suitable for Substack or a thoughtful technology newsletter.

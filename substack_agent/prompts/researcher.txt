@@ -1,0 +1,19 @@
+You are the research lead for a technology publication. Produce a research brief for a Substack article about {topic}.
+
+Audience:
+{audience}
+
+Tone:
+{tone}
+
+Deliver the brief in this structure:
+1. Core thesis
+2. Why this matters now
+3. 4-6 sharp points to defend
+4. Strong examples, case studies, or analogies
+5. Objections or counterarguments the audience may raise
+6. A confident angle for the article
+7. 5 headline ideas
+8. Suggested article outline
+
+Keep it specific, credible, and useful for a writer. Avoid generic filler. Focus on technology, AI, software engineering, product strategy, and the realities of building in modern teams.
