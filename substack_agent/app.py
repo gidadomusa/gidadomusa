@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import argparse
 import os
+from functools import lru_cache
 from pathlib import Path
 
+from dotenv import load_dotenv
 from flask import Flask, render_template_string, request
-from openai import OpenAI
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 PROMPTS_DIR = PROJECT_ROOT / "prompts"
+load_dotenv(PROJECT_ROOT / ".env")
 app = Flask(__name__)
 
 
@@ -20,13 +22,24 @@ def load_prompt(prompt_name: str) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
-def get_client() -> OpenAI:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise RuntimeError(
-            "OPENAI_API_KEY is not set. Export it in your shell before running this script."
-        )
-    return OpenAI(api_key=api_key)
+@lru_cache(maxsize=1)
+def get_janus_model():
+    from transformers import AutoModel, AutoTokenizer
+
+    model_name = "deepseek-ai/Janus-Pro-7B"
+    hf_token = os.getenv("HF_TOKEN")
+    if not hf_token:
+        raise RuntimeError("HF_TOKEN is not set in the project .env file.")
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token, trust_remote_code=True)
+    model = AutoModel.from_pretrained(
+        model_name,
+        token=hf_token,
+        device_map="auto",
+        trust_remote_code=True,
+    )
+    model.eval()
+    return tokenizer, model
 
 
 def extract_text(response) -> str:
@@ -47,19 +60,27 @@ def extract_text(response) -> str:
     return str(response).strip()
 
 
-def generate_with_prompt(system_prompt: str, user_prompt: str, model: str = "gpt-4.1-mini") -> str:
-    client = get_client()
-    response = client.responses.create(
-        model=model,
-        input=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-    )
-    return extract_text(response)
+def generate_with_janus(prompt: str) -> str:
+    import torch
+
+    tokenizer, model = get_janus_model()
+    inputs = tokenizer(prompt, return_tensors="pt")
+    input_device = next(model.parameters()).device
+    inputs = {name: value.to(input_device) for name, value in inputs.items()}
+
+    with torch.inference_mode():
+        output = model.generate(**inputs, max_new_tokens=1200, do_sample=True, temperature=0.7)
+
+    generated_tokens = output[0, inputs["input_ids"].shape[-1] :]
+    return tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
 
 
-def research_topic(topic: str, audience: str, tone: str, model: str = "gpt-4.1-mini") -> str:
+def generate_with_prompt(system_prompt: str, user_prompt: str, model: str = "deepseek-ai/Janus-Pro-7B") -> str:
+    prompt = f"System: {system_prompt}\n\nUser: {user_prompt}\n\nAssistant:"
+    return generate_with_janus(prompt)
+
+
+def research_topic(topic: str, audience: str, tone: str, model: str = "deepseek-ai/Janus-Pro-7B") -> str:
     template = load_prompt("researcher")
     prompt = template.format(topic=topic, audience=audience, tone=tone)
     system_prompt = (
@@ -69,7 +90,7 @@ def research_topic(topic: str, audience: str, tone: str, model: str = "gpt-4.1-m
     return generate_with_prompt(system_prompt, prompt, model=model)
 
 
-def edit_research_brief(topic: str, research: str, model: str = "gpt-4.1-mini") -> str:
+def edit_research_brief(topic: str, research: str, model: str = "deepseek-ai/Janus-Pro-7B") -> str:
     template = load_prompt("editor")
     prompt = template.format(topic=topic, research=research)
     system_prompt = (
@@ -79,7 +100,7 @@ def edit_research_brief(topic: str, research: str, model: str = "gpt-4.1-mini") 
     return generate_with_prompt(system_prompt, prompt, model=model)
 
 
-def write_post(topic: str, audience: str, tone: str, research: str, editorial_notes: str, model: str = "gpt-4.1-mini") -> str:
+def write_post(topic: str, audience: str, tone: str, research: str, editorial_notes: str, model: str = "deepseek-ai/Janus-Pro-7B") -> str:
     template = load_prompt("writer")
     prompt = template.format(
         topic=topic,
@@ -99,7 +120,7 @@ def generate_post(
     topic: str,
     audience: str = "software engineers, founders, and curious builders",
     tone: str = "sharp and thoughtful",
-    model: str = "gpt-4.1-mini",
+    model: str = "deepseek-ai/Janus-Pro-7B",
 ) -> dict[str, str]:
     research = research_topic(topic, audience, tone, model=model)
     editorial_notes = edit_research_brief(topic, research, model=model)
@@ -170,7 +191,7 @@ def generate_variants(
     topic: str,
     audience: str = "software engineers, founders, and curious builders",
     tone: str = "sharp and thoughtful",
-    model: str = "gpt-4.1-mini",
+    model: str = "deepseek-ai/Janus-Pro-7B",
     count: int = 3,
 ) -> list[dict[str, str]]:
     variants: list[dict[str, str]] = []
@@ -185,7 +206,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--topic", default="AI agents are changing software engineering and creative work", help="Core idea for the article")
     parser.add_argument("--audience", default="software engineers, founders, and curious builders", help="Who the article is written for")
     parser.add_argument("--tone", default="sharp and thoughtful", help="Writing tone")
-    parser.add_argument("--model", default="gpt-4.1-mini", help="OpenAI model to use")
+    parser.add_argument("--model", default="deepseek-ai/Janus-Pro-7B", help="Hugging Face or OpenAI model to use")
     parser.add_argument("--serve", action="store_true", help="Run the browser UI instead of the CLI output")
     parser.add_argument("--host", default="127.0.0.1", help="Host for the web UI")
     parser.add_argument("--port", type=int, default=8000, help="Port for the web UI")
@@ -232,7 +253,8 @@ def index():
           </label>
           <label>
             Model
-            <select name="model">
+                        <select name="model">
+                            <option value="deepseek-ai/Janus-Pro-7B" {% if model == 'deepseek-ai/Janus-Pro-7B' %}selected{% endif %}>deepseek-ai/Janus-Pro-7B (local)</option>
               <option value="gpt-4.1-mini" {% if model == 'gpt-4.1-mini' %}selected{% endif %}>gpt-4.1-mini</option>
               <option value="gpt-4o-mini" {% if model == 'gpt-4o-mini' %}selected{% endif %}>gpt-4o-mini</option>
               <option value="gpt-4o" {% if model == 'gpt-4o' %}selected{% endif %}>gpt-4o</option>
@@ -269,7 +291,7 @@ def index():
         topic = (request.form.get("topic") or "").strip()
         audience = (request.form.get("audience") or "software engineers, founders, and curious builders").strip()
         tone = (request.form.get("tone") or "sharp and thoughtful").strip()
-        model = (request.form.get("model") or "gpt-4.1-mini").strip()
+        model = (request.form.get("model") or "deepseek-ai/Janus-Pro-7B").strip()
 
         if not topic:
             return render_template_string(form_html, topic="", audience=audience, tone=tone, model=model, result=None, saved_path=None)
@@ -278,7 +300,7 @@ def index():
         draft_path = save_draft(result, output_dir="output")
         return render_template_string(form_html, topic=topic, audience=audience, tone=tone, model=model, result=result, saved_path=str(draft_path))
 
-    return render_template_string(form_html, topic="", audience="software engineers, founders, and curious builders", tone="sharp and thoughtful", model="gpt-4.1-mini", result=None, saved_path=None)
+    return render_template_string(form_html, topic="", audience="software engineers, founders, and curious builders", tone="sharp and thoughtful", model="deepseek-ai/Janus-Pro-7B", result=None, saved_path=None)
 
 
 def main() -> None:

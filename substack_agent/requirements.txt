@@ -1,2 +1,4 @@
-openai>=1.0.0
 Flask>=3.0.0
+python-dotenv>=1.0.0
+torch>=2.2.0
+transformers>=4.45.0
