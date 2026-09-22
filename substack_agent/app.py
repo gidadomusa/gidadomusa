@@ -24,22 +24,22 @@ def load_prompt(prompt_name: str) -> str:
 
 @lru_cache(maxsize=1)
 def get_janus_model():
-    from transformers import AutoModel, AutoTokenizer
+    from transformers import AutoModelForCausalLM
+    from janus.models import VLChatProcessor
 
     model_name = "deepseek-ai/Janus-Pro-7B"
     hf_token = os.getenv("HF_TOKEN")
     if not hf_token:
         raise RuntimeError("HF_TOKEN is not set in the project .env file.")
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token, trust_remote_code=True)
-    model = AutoModel.from_pretrained(
+    processor = VLChatProcessor.from_pretrained(model_name, token=hf_token)
+    model = AutoModelForCausalLM.from_pretrained(
         model_name,
         token=hf_token,
-        device_map="auto",
         trust_remote_code=True,
     )
     model.eval()
-    return tokenizer, model
+    return processor, model
 
 
 def extract_text(response) -> str:
@@ -63,16 +63,28 @@ def extract_text(response) -> str:
 def generate_with_janus(prompt: str) -> str:
     import torch
 
-    tokenizer, model = get_janus_model()
-    inputs = tokenizer(prompt, return_tensors="pt")
-    input_device = next(model.parameters()).device
-    inputs = {name: value.to(input_device) for name, value in inputs.items()}
+    processor, model = get_janus_model()
+    conversation = [
+        {"role": "<|User|>", "content": prompt, "images": []},
+        {"role": "<|Assistant|>", "content": ""},
+    ]
+    inputs = processor(conversations=conversation, images=None, force_batchify=True).to(model.device)
+    inputs_embeds = model.prepare_inputs_embeds(**inputs)
 
     with torch.inference_mode():
-        output = model.generate(**inputs, max_new_tokens=1200, do_sample=True, temperature=0.7)
+        output = model.language_model.generate(
+            inputs_embeds=inputs_embeds,
+            attention_mask=inputs.attention_mask,
+            pad_token_id=processor.tokenizer.eos_token_id,
+            bos_token_id=processor.tokenizer.bos_token_id,
+            eos_token_id=processor.tokenizer.eos_token_id,
+            max_new_tokens=1200,
+            do_sample=True,
+            temperature=0.7,
+            use_cache=True,
+        )
 
-    generated_tokens = output[0, inputs["input_ids"].shape[-1] :]
-    return tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
+    return processor.tokenizer.decode(output[0].cpu().tolist(), skip_special_tokens=True).strip()
 
 
 def generate_with_prompt(system_prompt: str, user_prompt: str, model: str = "deepseek-ai/Janus-Pro-7B") -> str:
