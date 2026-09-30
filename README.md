@@ -1,10 +1,12 @@
 # Hi, I'm Gida 👋
 
-AI/ML builder and software developer focused on building practical, user-centered products that combine machine learning, clean UX, and product-minded engineering.
+AI/ML Engineer • Full-Stack Builder • Product-minded Developer
 
-I enjoy turning ideas into working systems—especially in AI, automation, analytics, and full-stack product development.
+I design and build practical AI systems and software products that turn ideas into useful, real-world tools.
 
-## Featured Work
+My work sits at the intersection of machine learning, software engineering, and product thinking. I enjoy building systems that are both technically strong and genuinely useful to people.
+
+## Featured Projects
 
 ### Credit Card Fraud Detection System
 [CCFD](https://github.com/gidadomusa/CCFD)
@@ -14,12 +16,12 @@ A machine learning project focused on detecting fraudulent transactions with ris
 ### AI Substack Article Generator
 [substack-agent](https://github.com/gidadomusa/substack-agent)
 
-An AI-powered content workflow using researcher, editor, and writer roles to generate polished article drafts.
+An AI-powered writing workflow that uses researcher, editor, and writer roles to generate polished article drafts.
 
 ### Portfolio Website
 [Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
 
-A personal portfolio site for presenting projects, skills, and work in a clear, professional format.
+A personal portfolio site for showcasing projects, skills, and work in a clear, professional format.
 
 ## Skills
 
@@ -34,12 +36,12 @@ A personal portfolio site for presenting projects, skills, and work in a clear, 
 - API design and deployment
 - GitHub Actions and tooling
 
-## Currently Building
+## What I Enjoy Building
 
-- Practical AI applications with real-world value
-- Interpretable ML systems and product workflows
-- Prototype products that turn ideas into usable tools
-- Full-stack experiences that are simple, useful, and polished
+- AI products with real business or user value
+- Machine learning systems that are interpretable and practical
+- Automated workflows and productivity tools
+- Full-stack applications with clean UX and strong engineering fundamentals
 
 ## Connect
 
