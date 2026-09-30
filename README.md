@@ -61,10 +61,10 @@ Clean, professional portfolio site for showcasing projects and work. Built with 
 
 ## Let's Connect
 
-- **GitHub:** [@gidadomusa](https://github.com/gidadomusa)
-- **Portfolio:** [Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
-- **Email:** [your-email@example.com](mailto:your-email@example.com) *(update this)*
-- **LinkedIn:** [your-linkedin-url](https://linkedin.com) *(optional)*
+- **GitHub:** [gidadomusa71@gmail.com](https://github.com/gidadomusa)
+- **Portfolio:** [www.gidadodev.netlify.app](https://github.com/gidadomusa/Portfolio_website)
+- **Email:** [gidadomusa71@gmail.com](mailto:gidadomusa71@gmail.com) *(update this)*
+- **LinkedIn:** [muhammad-gidado-musa](https://linkedin.com) *(optional)*
 
 ---
 
