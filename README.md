@@ -1,83 +1,55 @@
-# Explainable AI Financial Risk Platform
+# Hi, I'm Gida 👋
 
-An end-to-end prototype for reviewing financial transactions with a transparent risk assessment. The platform combines a FastAPI backend with a React/Vite frontend so risk teams can submit transaction details, inspect a risk score, and see which transaction signals contributed most to the result.
+I build AI products, data-driven tools, and polished web experiences with a strong focus on practical problem-solving.
 
-## What It Does
+- AI/ML enthusiast and builder
+- Interested in fraud detection, product analytics, and agentic workflows
+- Exploring how AI can create real value in business and user-facing products
 
-- Accepts transaction amount, hour of day, distance from home, and recent transaction count.
-- Validates inputs through a typed FastAPI request model.
-- Returns a normalized risk score and `low` or `high` risk label.
-- Provides ranked feature contributions so each assessment is interpretable.
-- Includes notebooks and model utilities for exploratory analysis, feature engineering, training, and SHAP analysis.
-- Provides Docker Compose, Render, Vercel, and Nginx deployment configuration.
+## Featured projects
 
-The current API uses a deterministic demo scorer in `backend/app/models/predictor.py`. The model-training and SHAP modules provide the foundation for replacing it with trained artifacts.
+### 1) Credit Card Fraud Detection System
+[CCFD](https://github.com/gidadomusa/CCFD)
 
-## Architecture
+A machine learning project focused on detecting fraudulent credit card transactions using model-based risk scoring and explainability.
 
-The system is split into two services:
+### 2) AI Substack Article Generator
+[substack-agent](https://github.com/gidadomusa/substack-agent)
 
-- **Backend:** FastAPI service on port `8000`, exposing `/health` and `POST /api/predict`.
-- **Frontend:** React/Vite application on port `5173`, providing the transaction review interface.
+An AI-powered writing agent designed to generate Substack-style articles using researcher, editor, and writer roles.
 
-The repository also contains data placeholders, sample transaction input, analysis notebooks, tests, documentation, and deployment manifests.
+### 3) Portfolio Website
+[Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
 
-## Quick Start
+A personal portfolio site to present projects, skills, and work clearly and professionally.
 
-### Run with Docker Compose
+## Core interests
 
-```bash
-docker compose up --build
-```
+- Machine Learning
+- Explainable AI
+- AI Product Development
+- Full-stack app building
+- Automation and workflow design
 
-Then open:
+## Tech stack
 
-- Frontend: http://localhost:5173
-- Backend health check: http://localhost:8000/health
+- Python
+- FastAPI
+- JavaScript / TypeScript
+- React
+- CSS
+- Jupyter / Notebook workflows
+- GitHub Actions and deployment tooling
 
-### Run the services locally
+## What I'm working on
 
-Backend:
+- Building practical AI systems that are useful, explainable, and production-minded
+- Improving my full-stack and product-building skills
+- Turning ideas into deployable prototypes and portfolio-ready projects
 
-```bash
-pip install -r backend/requirements.txt
-uvicorn app.main:app --app-dir backend --reload --port 8000
-```
+## Connect
 
-Frontend, in a separate terminal:
+- GitHub: [@gidadomusa](https://github.com/gidadomusa)
+- Portfolio: [Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-## API Example
-
-```bash
-curl -X POST http://localhost:8000/api/predict \
-    -H "Content-Type: application/json" \
-    -d '{
-        "amount": 850,
-        "hour": 2,
-        "distance_from_home_km": 300,
-        "recent_transaction_count": 8
-    }'
-```
-
-The response includes `risk_score`, `risk_label`, and an `explanations` array sorted by feature impact. Full endpoint details are available in [API documentation](docs/api_documentation.md).
-
-## Repository Layout
-
-```text
-backend/       FastAPI application, prediction logic, tests, and model artifacts
-frontend/      React/Vite transaction review interface
-data/          Raw, processed, and sample input data locations
-notebooks/     EDA, feature engineering, training, and SHAP analysis notebooks
-docs/          System design, API, and deployment documentation
-deployment/    Render, Vercel, and Nginx configuration
-```
-
-## Project Status
-
-This is an explainable-risk platform prototype. The scoring endpoint and review UI are available now; persistence, production model artifacts, and expanded monitoring workflows remain part of the platform's ongoing development.
+> “I like turning ideas into working, useful systems.”
