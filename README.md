@@ -1,49 +1,45 @@
 # Hi, I'm Gida 👋
 
-I build AI-powered products and data-driven tools with a strong focus on solving real-world problems in a practical, user-friendly way.
+AI/ML builder and software developer focused on building practical, user-centered products that combine machine learning, clean UX, and product-minded engineering.
 
-My work sits at the intersection of machine learning, software engineering, and product thinking. I enjoy turning ideas into useful prototypes, polished interfaces, and systems that can actually be used.
+I enjoy turning ideas into working systems—especially in AI, automation, analytics, and full-stack product development.
 
-## Featured Projects
+## Featured Work
 
-### 1) Credit Card Fraud Detection System
-[CCFD](https://github.com/gidadomusa/CCFD)  
-A machine learning project focused on fraud risk detection and explainability for financial transactions.
+### Credit Card Fraud Detection System
+[CCFD](https://github.com/gidadomusa/CCFD)
 
-### 2) AI Substack Article Generator
-[substack-agent](https://github.com/gidadomusa/substack-agent)  
-An AI-powered writing agent that uses researcher, editor, and writer roles to generate Substack-style content.
+A machine learning project focused on detecting fraudulent transactions with risk modeling and explainability.
 
-### 3) Portfolio Website
-[Portfolio_website](https://github.com/gidadomusa/Portfolio_website)  
-A personal portfolio website for presenting projects, skills, and work clearly.
+### AI Substack Article Generator
+[substack-agent](https://github.com/gidadomusa/substack-agent)
 
-## Core Interests
+An AI-powered content workflow using researcher, editor, and writer roles to generate polished article drafts.
 
-- Machine Learning
-- Explainable AI
-- AI Product Development
-- Full-Stack Development
-- Workflow Automation
-- Data-Driven Product Design
+### Portfolio Website
+[Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
 
-## Tech Stack
+A personal portfolio site for presenting projects, skills, and work in a clear, professional format.
+
+## Skills
 
 - Python
 - FastAPI
 - JavaScript / TypeScript
 - React
 - CSS
-- Jupyter / Notebook workflows
-- GitHub Actions
-- Git / Version Control
+- Machine Learning
+- Explainable AI
+- Data workflows and notebooks
+- API design and deployment
+- GitHub Actions and tooling
 
-## What I'm Building
+## Currently Building
 
-- Practical AI systems that solve real problems
-- Data-driven applications with clean user experiences
-- Product-minded prototypes and portfolio-ready projects
-- Automation and workflow tools that improve efficiency
+- Practical AI applications with real-world value
+- Interpretable ML systems and product workflows
+- Prototype products that turn ideas into usable tools
+- Full-stack experiences that are simple, useful, and polished
 
 ## Connect
 
