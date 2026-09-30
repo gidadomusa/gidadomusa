@@ -1,4 +1,4 @@
-# 👋 Hi, I'm Gida
+# 👋 Hi, I'm Gidado
 
 **AI/ML Engineer • Full-Stack Builder • Product-minded Developer**
 
