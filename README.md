@@ -1,37 +1,33 @@
 # Hi, I'm Gida 👋
 
-I build AI products, data-driven tools, and polished web experiences with a strong focus on practical problem-solving.
+I build AI-powered products and data-driven tools with a strong focus on solving real-world problems in a practical, user-friendly way.
 
-- AI/ML enthusiast and builder
-- Interested in fraud detection, product analytics, and agentic workflows
-- Exploring how AI can create real value in business and user-facing products
+My work sits at the intersection of machine learning, software engineering, and product thinking. I enjoy turning ideas into useful prototypes, polished interfaces, and systems that can actually be used.
 
-## Featured projects
+## Featured Projects
 
 ### 1) Credit Card Fraud Detection System
-[CCFD](https://github.com/gidadomusa/CCFD)
-
-A machine learning project focused on detecting fraudulent credit card transactions using model-based risk scoring and explainability.
+[CCFD](https://github.com/gidadomusa/CCFD)  
+A machine learning project focused on fraud risk detection and explainability for financial transactions.
 
 ### 2) AI Substack Article Generator
-[substack-agent](https://github.com/gidadomusa/substack-agent)
-
-An AI-powered writing agent designed to generate Substack-style articles using researcher, editor, and writer roles.
+[substack-agent](https://github.com/gidadomusa/substack-agent)  
+An AI-powered writing agent that uses researcher, editor, and writer roles to generate Substack-style content.
 
 ### 3) Portfolio Website
-[Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
+[Portfolio_website](https://github.com/gidadomusa/Portfolio_website)  
+A personal portfolio website for presenting projects, skills, and work clearly.
 
-A personal portfolio site to present projects, skills, and work clearly and professionally.
-
-## Core interests
+## Core Interests
 
 - Machine Learning
 - Explainable AI
 - AI Product Development
-- Full-stack app building
-- Automation and workflow design
+- Full-Stack Development
+- Workflow Automation
+- Data-Driven Product Design
 
-## Tech stack
+## Tech Stack
 
 - Python
 - FastAPI
@@ -39,17 +35,19 @@ A personal portfolio site to present projects, skills, and work clearly and prof
 - React
 - CSS
 - Jupyter / Notebook workflows
-- GitHub Actions and deployment tooling
+- GitHub Actions
+- Git / Version Control
 
-## What I'm working on
+## What I'm Building
 
-- Building practical AI systems that are useful, explainable, and production-minded
-- Improving my full-stack and product-building skills
-- Turning ideas into deployable prototypes and portfolio-ready projects
+- Practical AI systems that solve real problems
+- Data-driven applications with clean user experiences
+- Product-minded prototypes and portfolio-ready projects
+- Automation and workflow tools that improve efficiency
 
 ## Connect
 
 - GitHub: [@gidadomusa](https://github.com/gidadomusa)
 - Portfolio: [Portfolio_website](https://github.com/gidadomusa/Portfolio_website)
 
-> “I like turning ideas into working, useful systems.”
+> I like turning ideas into working, useful systems.
